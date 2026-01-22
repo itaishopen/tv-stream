@@ -151,7 +151,3 @@ const router = useRouter();
       @click="closeSearch"></div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

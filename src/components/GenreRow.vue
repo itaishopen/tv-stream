@@ -79,6 +79,7 @@
 @media (max-width: 768px) {
   .scrollbar-hide {
     scroll-snap-type: x mandatory;
+    scroll-padding-left: 1rem;
   }
 
   .scrollbar-hide > * {
