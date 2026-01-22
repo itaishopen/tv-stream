@@ -82,9 +82,11 @@
         <p class="text-gray-400 text-center mb-6">{{ error || 'Show not found' }}</p>
         <button
           @click="goBack"
-          class="w-full bg-accent hover:bg-accent/80 text-white py-3 px-6 rounded-lg transition-colors font-semibold"
-        >
-          ← Back to Dashboard
+          class="w-full cursor-pointer bg-accent hover:bg-accent/80 text-white py-3 px-6 rounded-lg transition-colors font-semibold">
+          <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Dashboard
         </button>
       </div>
     </div>
@@ -101,7 +103,7 @@
         <div class="relative z-10 container mx-auto px-4 py-12">
           <button
             @click="goBack"
-            class="mb-8 flex items-center gap-2 text-gray-300 hover:text-white transition-colors group">
+            class="mb-8 flex cursor-pointer items-center gap-2 text-gray-300 hover:text-white transition-colors group">
             <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>

@@ -52,7 +52,7 @@
           <p class="text-gray-400 text-center text-sm mb-4">{{ showStore.error }}</p>
           <button
             @click="showStore.fetchShows(showStore.currentPage)"
-            class="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 py-2 px-4 rounded-lg transition-colors">
+            class="w-full cursor-pointer bg-red-500/20 hover:bg-red-500/30 text-red-400 py-2 px-4 rounded-lg transition-colors">
             Try Again
           </button>
         </div>
@@ -70,7 +70,7 @@
           <button
             @click="showStore.prevPage"
             :disabled="showStore.currentPage === 0 || showStore.loading"
-            class="px-6 py-3 bg-dark-100 hover:bg-dark-200 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-full font-semibold transition-all hover:scale-105 border cursor-pointer border-white/10">
+            class="px-6 py-3 cursor-pointer bg-dark-100 hover:bg-dark-200 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-full font-semibold transition-all hover:scale-105 border cursor-pointer border-white/10">
             ← Previous Page
           </button>
 
@@ -82,7 +82,7 @@
           <button
             @click="showStore.nextPage"
             :disabled="showStore.loading"
-            class="px-6 py-3 bg-accent hover:bg-accent/80 text-white rounded-full font-semibold transition-all cursor-pointer hover:scale-105">
+            class="px-6 py-3 cursor-pointer bg-accent hover:bg-accent/80 text-white rounded-full font-semibold transition-all cursor-pointer hover:scale-105">
             Next Page →
           </button>
         </div>

@@ -35,7 +35,7 @@
       <div class="hidden md:flex gap-2" v-if="shows.length > 3">
         <button
           @click="scrollLeft"
-          class="w-10 h-10 rounded-full bg-dark-100/80 hover:bg-dark-100 text-white flex items-center justify-center transition-colors backdrop-blur-sm border border-white/10"
+          class="w-10 h-10 cursor-pointer rounded-full bg-dark-100/80 hover:bg-dark-100 text-white flex items-center justify-center transition-colors backdrop-blur-sm border border-white/10"
           aria-label="Scroll left">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -43,7 +43,7 @@
         </button>
         <button
           @click="scrollRight"
-          class="w-10 h-10 rounded-full bg-dark-100/80 hover:bg-dark-100 text-white flex items-center justify-center transition-colors backdrop-blur-sm border border-white/10"
+          class="w-10 h-10 cursor-pointer rounded-full bg-dark-100/80 hover:bg-dark-100 text-white flex items-center justify-center transition-colors backdrop-blur-sm border border-white/10"
           aria-label="Scroll right">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

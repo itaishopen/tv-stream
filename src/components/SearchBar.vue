@@ -95,7 +95,7 @@ const router = useRouter();
             v-for="result in searchResults"
             :key="result.show.id"
             @click="selectShow(result.show.id)"
-            class="w-full flex items-start gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors text-left group">
+            class="w-full flex cursor-pointer items-start gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors text-left group">
             <img
               :src="getImageUrl(result)"
               :alt="result.show.name"
