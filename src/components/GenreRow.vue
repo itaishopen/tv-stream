@@ -65,25 +65,24 @@
 </template>
 
 <style scoped>
-/* Hide scrollbar but keep functionality */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Snap scrolling for better mobile experience */
-@media (max-width: 768px) {
   .scrollbar-hide {
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 1rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  .scrollbar-hide > * {
-    scroll-snap-align: start;
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
-}
+
+
+  @media (max-width: 768px) {
+    .scrollbar-hide {
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 1rem;
+    }
+
+    .scrollbar-hide > * {
+      scroll-snap-align: start;
+    }
+  }
 </style>
