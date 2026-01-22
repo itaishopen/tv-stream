@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
-  import { useRouter } from 'vue-router';
-  import type {SearchResult} from "@/types/search-result.ts";
-  import {showService} from "@/api/showService.ts";
+import {ref, watch} from 'vue';
+import {useRouter} from 'vue-router';
+import type {SearchResult} from "@/types/search-result.ts";
+import {showService} from "@/api/showService.ts";
 
 
-  const router = useRouter();
+const router = useRouter();
   const searchQuery = ref<string>('');
   const searchResults = ref<SearchResult[]>([]);
   const isSearching = ref<boolean>(false);
@@ -31,8 +31,7 @@
 
     debounceTimer = setTimeout(async () => {
       try {
-        const results = await showService.searchShows(newQuery.trim());
-        searchResults.value = results;
+        searchResults.value = await showService.searchShows(newQuery.trim());
         showResults.value = true;
       } catch (err) {
         searchError.value = err instanceof Error ? err.message : 'Search failed';
