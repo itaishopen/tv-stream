@@ -8,7 +8,7 @@ const router = createRouter({
       name: 'dashboard',
       component: DashboardView,
       meta: {
-        title: 'TVMaze Dashboard - Discover TV Shows'
+        title: 'TVStream Dashboard - Discover TV Shows'
       }
     },
     {
@@ -16,7 +16,7 @@ const router = createRouter({
       name: 'show-detail',
       component: ShowDetailView,
       meta: {
-        title: 'Show Details - TVMaze Dashboard'
+        title: 'Show Details - TVStream Dashboard'
       }
     },
     {
@@ -36,7 +36,7 @@ const router = createRouter({
 
 // Update page title on route change
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title as string || 'TVMaze Dashboard';
+  document.title = to.meta.title as string || 'TVStream Dashboard';
   next();
 });
 
