@@ -19,7 +19,6 @@ interface GenreGroup {
  * ```ts
  * const store = useShowStore();
  * await store.fetchShows(0);
- * console.log(store.dashboardData);
  * ```
  */
 export const useShowStore = defineStore('shows', () => {
