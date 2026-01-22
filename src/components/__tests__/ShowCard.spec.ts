@@ -9,6 +9,7 @@ describe('ShowCard', () => {
     name: 'Breaking Bad',
     genres: ['Drama', 'Crime', 'Thriller'],
     rating: { average: 9.5 },
+    status: 'Ended',
     image: { medium: 'http://example.com/medium.jpg', original: 'http://example.com/original.jpg' },
     summary: '<p>A chemistry teacher turns to crime</p>',
     ...overrides,
@@ -57,7 +58,7 @@ describe('ShowCard', () => {
       const wrapper = mountComponent(createMockShow({ image: null }))
 
       const img = wrapper.find('img')
-      expect(img.attributes('src')).toBe('https://placeholdit.com/210x295/dddddd/999999')
+      expect(img.attributes('src')).toBe('https://placeholdit.com/210x295/dddddd/999999?text=NO+IMAGE')
       expect(img.attributes('loading')).toBe('lazy')
     })
 

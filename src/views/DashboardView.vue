@@ -19,7 +19,7 @@
       <div class="relative z-10 container mx-auto px-4 py-16 md:py-24">
         <div class="max-w-3xl mx-auto">
           <h1 class="text-5xl md:text-7xl font-display font-bold mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-accent to-primary-400 animate-fade-in">
-            Tv-Show Dashboard
+            TV-Show Dashboard
           </h1>
           <p class="text-gray-400 text-center mb-10 text-lg md:text-xl animate-slide-up">
             Discover your next favorite show

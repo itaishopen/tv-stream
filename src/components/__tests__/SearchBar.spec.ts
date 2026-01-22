@@ -29,6 +29,7 @@ describe('SearchBar', () => {
         name: 'Breaking Bad',
         genres: ['Drama', 'Crime', 'Thriller'],
         rating: { average: 9.5 },
+        status: 'Ended',
         image: { medium: 'http://example.com/bb.jpg', original: 'http://example.com/bb-lg.jpg' },
         summary: '<p>A chemistry teacher turns to crime</p>',
       },
@@ -40,6 +41,7 @@ describe('SearchBar', () => {
         name: 'Better Call Saul',
         genres: ['Drama', 'Crime'],
         rating: { average: 9.0 },
+        status: 'Ended',
         image: null,
         summary: '<p>The story of Saul Goodman</p>',
       },
@@ -208,7 +210,7 @@ describe('SearchBar', () => {
       await flushPromises()
 
       const img = wrapper.find('img')
-      expect(img.attributes('src')).toBe('https://placeholdit.com/100x140/dddddd/999999')
+      expect(img.attributes('src')).toBe('https://placeholdit.com/100x140/dddddd/999999?text=NO+IMAGE')
     })
   })
 

@@ -54,7 +54,7 @@ const router = useRouter();
   };
 
   const getImageUrl = (result: SearchResult) => {
-    return result.show.image?.medium || 'https://placeholdit.com/100x140/dddddd/999999';
+    return result.show.image?.medium || 'https://placeholdit.com/100x140/dddddd/999999?text=NO+IMAGE';
   };
 </script>
 

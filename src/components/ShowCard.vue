@@ -8,7 +8,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const imageUrl = computed(() => props.show.image?.medium || 'https://placeholdit.com/210x295/dddddd/999999');
+const imageUrl = computed(() => props.show.image?.medium || 'https://placeholdit.com/210x295/dddddd/999999?text=NO+IMAGE');
 const rating = computed(() => props.show.rating.average?.toFixed(1) || 'N/A');
 </script>
 

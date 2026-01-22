@@ -2,6 +2,8 @@
 
 A Vue 3 application for browsing TV shows using the TVMaze API.
 
+**Live Demo**: https://itaishopen.github.io/tv-stream/
+
 ## Requirements
 
 - **Node.js**: ^20.19.0 or >=22.12.0

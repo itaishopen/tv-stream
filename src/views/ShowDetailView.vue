@@ -114,7 +114,7 @@
           <div class="flex flex-col md:flex-row gap-8 items-start">
             <div class="flex-shrink-0 animate-scale-in">
               <img
-                :src="show.image?.original || show.image?.medium || 'https://via.placeholder.com/300x450/1a1a1a/666666?text=No+Image'"
+                :src="show.image?.original || show.image?.medium || 'https://placeholdit.com/300x450/dddddd/999999?text=NO+IMAGE'"
                 :alt="show.name"
                 class="w-64 md:w-80 rounded-2xl shadow-2xl border-4 border-white/10"/>
             </div>
@@ -133,11 +133,39 @@
                 </span>
               </div>
 
-              <RatingBadge
-                :rating="show.rating.average"
-                size="lg"
-                show-max
-                class="mb-6" />
+              <div class="flex flex-wrap items-center gap-4 mb-6">
+                <RatingBadge
+                  :rating="show.rating.average"
+                  size="lg"
+                  show-max />
+
+                <div
+                  v-if="show.status"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
+                  :class="{
+                    'bg-green-500/20 border border-green-500/40 text-green-400': show.status === 'Running',
+                    'bg-red-500/20 border border-red-500/40 text-red-400': show.status === 'Ended',
+                    'bg-gray-500/20 border border-gray-500/40 text-gray-400': show.status !== 'Running' && show.status !== 'Ended'
+                  }">
+                  <span
+                    class="w-2 h-2 rounded-full"
+                    :class="{
+                      'bg-green-400': show.status === 'Running',
+                      'bg-red-400': show.status === 'Ended',
+                      'bg-gray-400': show.status !== 'Running' && show.status !== 'Ended'
+                    }"></span>
+                  {{ show.status }}
+                </div>
+
+                <div
+                  v-if="show.premiered"
+                  class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Premiered {{ show.premiered }}
+                </div>
+              </div>
 
               <div class="prose prose-invert max-w-none">
                 <h2 class="text-2xl font-display font-bold mb-3 text-accent">Overview</h2>

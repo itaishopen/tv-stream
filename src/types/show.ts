@@ -9,6 +9,8 @@ export interface Show {
   rating: Rating;
   image: Image | null;
   summary: string;
+  status: string;
+  premiered?: string;
   _embedded?: {
     episodes: Episode[];
   };
