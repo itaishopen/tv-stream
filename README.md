@@ -1,54 +1,61 @@
-# tv-stream
+# TV Stream Dashboard
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue 3 application for browsing TV shows using the TVMaze API.
 
-## Recommended IDE Setup
+## Requirements
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Node.js**: ^20.19.0 or >=22.12.0
+- **npm**: 10.x or higher
 
-## Recommended Browser Setup
+## Getting Started
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
+# Install dependencies
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# Run development server
 npm run dev
-```
 
-### Type-Check, Compile and Minify for Production
+# Run tests
+npm run test:unit
 
-```sh
+# Build for production
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## Architectural Decisions
 
-```sh
-npm run test:unit
+### Pinia over Vuex
+
+- **Simpler API**: Pinia eliminates mutations, using only state and actions, reducing boilerplate
+- **TypeScript support**: First-class TypeScript inference without extra configuration
+- **Composition API native**: Designed for Vue 3's Composition API, aligning with modern Vue patterns
+- **Lighter bundle**: Smaller footprint (~1KB) compared to Vuex
+- **Official recommendation**: Pinia is now the official state management solution for Vue
+
+### Tailwind CSS
+
+- **Utility-first**: Rapid UI development without context-switching to CSS files
+- **No unused CSS**: Production builds automatically purge unused styles
+- **Responsive design**: Built-in responsive modifiers (`md:`, `lg:`) simplify mobile-first development
+- **Customizable**: Easy theming via `tailwind.config.js` for colors, fonts, and animations
+
+## Project Structure
+
+```
+src/
+├── api/          # API service layer
+├── components/   # Reusable Vue components
+├── stores/       # Pinia stores
+├── types/        # TypeScript interfaces
+└── views/        # Page components
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## Tech Stack
 
-```sh
-npm run lint
-```
+- Vue 3.5 + TypeScript
+- Pinia 3 (State Management)
+- Vue Router 4
+- Tailwind CSS 4
+- Vite 7
+- Vitest (Testing)
