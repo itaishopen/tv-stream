@@ -1,0 +1,277 @@
+<script setup lang="ts">
+  import { ref, onMounted, computed } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import type {Show} from "@/types/show.ts";
+  import type {Episode} from "@/types/episode.ts";
+  import {showService} from "@/api/showService.ts";
+
+
+  const route = useRoute();
+  const router = useRouter();
+
+  const show = ref<Show | null>(null);
+  const loading = ref<boolean>(true);
+  const error = ref<string | null>(null);
+
+  const episodesBySeason = computed(() => {
+    if (!show.value?._embedded?.episodes) return new Map<number, Episode[]>();
+
+    const seasonMap = new Map<number, Episode[]>();
+
+    show.value._embedded.episodes.forEach(episode => {
+      if (!seasonMap.has(episode.season)) {
+        seasonMap.set(episode.season, []);
+      }
+      seasonMap.get(episode.season)!.push(episode);
+    });
+
+    return seasonMap;
+  });
+
+  const sortedSeasons = computed(() => {
+    return Array.from(episodesBySeason.value.keys()).sort((a, b) => a - b);
+  });
+
+  const stripHtml = (html: string): string => {
+    return html.replaceAll(/<[^>]*>/g, '');
+  };
+
+  onMounted(async () => {
+    const showId = Number(route.params.id);
+
+    if (Number.isNaN(showId)) {
+      error.value = 'Invalid show ID';
+      loading.value = false;
+      return;
+    }
+
+    try {
+      show.value = await showService.getShowDetails(showId);
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to load show details';
+      console.error('Error fetching show details:', err);
+    } finally {
+      loading.value = false;
+    }
+  });
+
+  const goBack = () => {
+    router.push('/');
+  };
+</script>
+
+<template>
+  <div class="show-detail min-h-screen bg-dark text-white">
+    <div v-if="loading" class="flex justify-center items-center min-h-screen">
+      <div class="text-center">
+        <svg class="animate-spin h-16 w-16 text-accent mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-gray-400 text-lg">Loading show details...</p>
+      </div>
+    </div>
+
+    <div v-else-if="error || !show" class="flex justify-center items-center min-h-screen px-4">
+      <div class="bg-red-500/10 border border-red-500/30 rounded-2xl p-8 max-w-md">
+        <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-red-400 text-center font-semibold text-xl mb-2">Failed to load show</p>
+        <p class="text-gray-400 text-center mb-6">{{ error || 'Show not found' }}</p>
+        <button
+          @click="goBack"
+          class="w-full bg-accent hover:bg-accent/80 text-white py-3 px-6 rounded-lg transition-colors font-semibold"
+        >
+          ← Back to Dashboard
+        </button>
+      </div>
+    </div>
+
+    <div v-else>
+      <div class="tv-section relative">
+        <div
+          class="absolute inset-0 bg-cover bg-center"
+          :style="{ backgroundImage: show.image?.original ? `url(${show.image.original})` : 'none' }">
+          <div class="absolute inset-0 bg-gradient-to-b from-dark/60 via-dark/90 to-dark"></div>
+          <div class="absolute inset-0 backdrop-blur-3xl"></div>
+        </div>
+
+        <div class="relative z-10 container mx-auto px-4 py-12">
+          <button
+            @click="goBack"
+            class="mb-8 flex items-center gap-2 text-gray-300 hover:text-white transition-colors group">
+            <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Dashboard
+          </button>
+
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <div class="flex-shrink-0 animate-scale-in">
+              <img
+                :src="show.image?.original || show.image?.medium || 'https://via.placeholder.com/300x450/1a1a1a/666666?text=No+Image'"
+                :alt="show.name"
+                class="w-64 md:w-80 rounded-2xl shadow-2xl border-4 border-white/10"/>
+            </div>
+
+            <div class="flex-1 animate-fade-in" style="animation-delay: 0.2s;">
+              <h1 class="text-5xl md:text-6xl font-display font-bold mb-4">
+                {{ show.name }}
+              </h1>
+
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span
+                  v-for="genre in show.genres"
+                  :key="genre"
+                  class="px-4 py-2 bg-accent/20 border border-accent/40 text-accent rounded-full text-sm font-semibold">
+                  {{ genre }}
+                </span>
+              </div>
+
+              <div
+                v-if="show.rating.average"
+                class="flex items-center gap-3 mb-6">
+                <div class="flex items-center gap-2 bg-accent/20 px-4 py-2 rounded-full">
+                  <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <span class="text-2xl font-bold text-accent">{{ show.rating.average.toFixed(1) }}</span>
+                  <span class="text-gray-400 text-sm">/10</span>
+                </div>
+              </div>
+
+              <div class="prose prose-invert max-w-none">
+                <h2 class="text-2xl font-display font-bold mb-3 text-accent">Overview</h2>
+                <p class="text-gray-300 text-lg leading-relaxed">
+                  {{ show.summary ? stripHtml(show.summary) : 'No summary available.' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mx-auto px-4 py-12">
+        <h2 class="text-4xl font-display font-bold mb-8">Episodes</h2>
+
+        <div v-if="show._embedded?.episodes && show._embedded.episodes.length > 0">
+          <div
+            v-for="season in sortedSeasons"
+            :key="season"
+            class="mb-12 animate-slide-up">
+            <h3 class="text-2xl font-display font-semibold mb-6 text-accent">
+              Season {{ season }}
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                v-for="episode in episodesBySeason.get(season)"
+                :key="episode.id"
+                class="episode-card group bg-dark-100 border border-white/10 rounded-xl overflow-hidden hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/20">
+                <div class="aspect-video bg-dark-200 overflow-hidden">
+                  <img
+                    v-if="episode.image"
+                    :src="episode.image.medium"
+                    :alt="episode.name"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <div v-else class="w-full h-full flex items-center justify-center text-gray-600">
+                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="p-5">
+                  <div class="flex items-start justify-between mb-2">
+                    <h4 class="font-display font-semibold text-white group-hover:text-accent transition-colors flex-1">
+                      {{ episode.number }}. {{ episode.name }}
+                    </h4>
+                    <span
+                      v-if="episode.rating.average"
+                      class="text-accent font-bold text-sm ml-2 flex-shrink-0">
+                      <svg class="w-4 h-4 inline accent-yellow-300" fill="yellow" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+                      {{ episode.rating.average.toFixed(1) }}
+                    </span>
+                  </div>
+
+                  <p class="text-gray-400 text-sm line-clamp-3">
+                    {{ episode.summary ? stripHtml(episode.summary) : 'No summary available.' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-center py-12">
+          <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <p class="text-gray-500 text-lg">No episodes available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+  .tv-section {
+    min-height: 60vh;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out;
+  }
+
+  .episode-card {
+    animation: slideUp 0.5s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .episode-card:nth-child(1) { animation-delay: 0s; }
+  .episode-card:nth-child(2) { animation-delay: 0.05s; }
+  .episode-card:nth-child(3) { animation-delay: 0.1s; }
+  .episode-card:nth-child(4) { animation-delay: 0.15s; }
+  .episode-card:nth-child(5) { animation-delay: 0.2s; }
+  .episode-card:nth-child(6) { animation-delay: 0.25s; }
+</style>

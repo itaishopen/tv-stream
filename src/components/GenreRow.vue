@@ -65,6 +65,18 @@
 </template>
 
 <style scoped>
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Snap scrolling for better mobile experience */
+@media (max-width: 768px) {
   .scrollbar-hide {
     scroll-snap-type: x mandatory;
   }
@@ -72,17 +84,5 @@
   .scrollbar-hide > * {
     scroll-snap-align: start;
   }
-
-
-  @media (min-width: 768px) {
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      scroll-behavior: smooth;
-    }
-
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-  }
+}
 </style>
