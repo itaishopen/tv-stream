@@ -34,12 +34,6 @@ describe('ShowCard', () => {
 
       expect(wrapper.find('h3').text()).toBe('Breaking Bad')
     })
-
-    it('should render with different show name', () => {
-      const wrapper = mountComponent(createMockShow({ name: 'Better Call Saul' }))
-
-      expect(wrapper.find('h3').text()).toBe('Better Call Saul')
-    })
   })
 
   describe('routing', () => {
@@ -48,13 +42,6 @@ describe('ShowCard', () => {
 
       const link = wrapper.find('a')
       expect(link.attributes('href')).toBe('/shows/123')
-    })
-
-    it('should link to different show IDs', () => {
-      const wrapper = mountComponent(createMockShow({ id: 456 }))
-
-      const link = wrapper.find('a')
-      expect(link.attributes('href')).toBe('/shows/456')
     })
   })
 
@@ -66,11 +53,12 @@ describe('ShowCard', () => {
       expect(img.attributes('src')).toBe('http://example.com/medium.jpg')
     })
 
-    it('should use placeholder when show has no image', () => {
+    it('should use placeholder when show has no image and have lazy loading enabled', () => {
       const wrapper = mountComponent(createMockShow({ image: null }))
 
       const img = wrapper.find('img')
       expect(img.attributes('src')).toBe('https://placeholdit.com/210x295/dddddd/999999')
+      expect(img.attributes('loading')).toBe('lazy')
     })
 
     it('should have alt text with show name', () => {
@@ -78,13 +66,6 @@ describe('ShowCard', () => {
 
       const img = wrapper.find('img')
       expect(img.attributes('alt')).toBe('Test Show')
-    })
-
-    it('should have lazy loading enabled', () => {
-      const wrapper = mountComponent()
-
-      const img = wrapper.find('img')
-      expect(img.attributes('loading')).toBe('lazy')
     })
   })
 

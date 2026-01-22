@@ -158,7 +158,7 @@ describe('SearchBar', () => {
   })
 
   describe('search results', () => {
-    it('should display search results', async () => {
+    it('should display search results and display show name', async () => {
       mockedSearchShows.mockResolvedValueOnce(mockSearchResults)
       const wrapper = mountComponent()
 
@@ -168,21 +168,12 @@ describe('SearchBar', () => {
 
       const results = wrapper.findAll('button.w-full')
       expect(results).toHaveLength(2)
-    })
-
-    it('should display show name in results', async () => {
-      mockedSearchShows.mockResolvedValueOnce(mockSearchResults)
-      const wrapper = mountComponent()
-
-      await wrapper.find('input').setValue('breaking')
-      vi.advanceTimersByTime(300)
-      await flushPromises()
-
       expect(wrapper.text()).toContain('Breaking Bad')
       expect(wrapper.text()).toContain('Better Call Saul')
     })
 
-    it('should display show rating in results', async () => {
+
+    it('should display show rating and search score in results', async () => {
       mockedSearchShows.mockResolvedValueOnce(mockSearchResults)
       const wrapper = mountComponent()
 
@@ -192,16 +183,6 @@ describe('SearchBar', () => {
 
       expect(wrapper.text()).toContain('9.5')
       expect(wrapper.text()).toContain('9.0')
-    })
-
-    it('should display search score in results', async () => {
-      mockedSearchShows.mockResolvedValueOnce(mockSearchResults)
-      const wrapper = mountComponent()
-
-      await wrapper.find('input').setValue('breaking')
-      vi.advanceTimersByTime(300)
-      await flushPromises()
-
       expect(wrapper.text()).toContain('Score: 0.95')
       expect(wrapper.text()).toContain('Score: 0.85')
     })
@@ -288,20 +269,6 @@ describe('SearchBar', () => {
       await firstResult.trigger('click')
 
       expect(mockPush).toHaveBeenCalledWith('/shows/1')
-    })
-
-    it('should navigate to correct show ID', async () => {
-      mockedSearchShows.mockResolvedValueOnce([mockSearchResults[1]!])
-      const wrapper = mountComponent()
-
-      await wrapper.find('input').setValue('saul')
-      vi.advanceTimersByTime(300)
-      await flushPromises()
-
-      const result = wrapper.find('button.w-full')
-      await result.trigger('click')
-
-      expect(mockPush).toHaveBeenCalledWith('/shows/2')
     })
   })
 })

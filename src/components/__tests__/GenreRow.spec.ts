@@ -38,23 +38,12 @@ describe('GenreRow', () => {
   }
 
   describe('rendering', () => {
-    it('should render the genre title', () => {
+    it('should render the genre title and correct show prop to each ShowCard', () => {
       const wrapper = mountComponent()
 
       expect(wrapper.find('h2').text()).toBe('Drama')
-    })
-
-    it('should render ShowCard for each show', () => {
-      const wrapper = mountComponent()
-
       const showCards = wrapper.findAllComponents(ShowCard)
       expect(showCards).toHaveLength(3)
-    })
-
-    it('should pass correct show prop to each ShowCard', () => {
-      const wrapper = mountComponent()
-
-      const showCards = wrapper.findAllComponents(ShowCard)
       showCards.forEach((card, index) => {
         expect(card.props('show')).toEqual(mockShows[index])
       })
