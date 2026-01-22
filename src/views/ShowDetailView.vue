@@ -33,7 +33,7 @@
   });
 
   const stripHtml = (html: string): string => {
-    return html.replaceAll(/<[^>]*>/g, '');
+    return html.replace(/<[^>]*>/g, '');
   };
 
   onMounted(async () => {
