@@ -31,6 +31,7 @@ describe('ShowDetailView', () => {
     rating: { average: 9.5 },
     image: { medium: 'http://example.com/medium.jpg', original: 'http://example.com/original.jpg' },
     summary: '<p>A chemistry teacher turns to crime.</p>',
+    status: 'Ended',
     _embedded: {
       episodes: [
         {

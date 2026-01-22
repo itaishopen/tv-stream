@@ -10,6 +10,7 @@ const createMockShow = (id: number, name: string): Show => ({
   genres: ['Drama'],
   rating: { average: 8.0 },
   image: { medium: 'http://example.com/medium.jpg', original: 'http://example.com/original.jpg' },
+  status: 'Ended',
   summary: '<p>Test summary</p>',
 })
 
