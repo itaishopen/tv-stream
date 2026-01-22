@@ -49,5 +49,4 @@ class ShowService {
   }
 }
 
-// Export singleton instance
 export const showService = new ShowService();
