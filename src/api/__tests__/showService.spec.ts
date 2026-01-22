@@ -15,6 +15,7 @@ describe('ShowService', () => {
     name: 'Test Show',
     genres: ['Drama', 'Comedy'],
     rating: { average: 8.5 },
+    status: 'Ended',
     image: { medium: 'http://example.com/medium.jpg', original: 'http://example.com/original.jpg' },
     summary: '<p>Test summary</p>',
   }

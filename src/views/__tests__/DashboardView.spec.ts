@@ -21,6 +21,7 @@ describe('DashboardView', () => {
     name,
     genres,
     rating: { average: rating },
+    status: 'Ended',
     image: { medium: 'http://example.com/medium.jpg', original: 'http://example.com/original.jpg' },
     summary: '<p>Test summary</p>',
   })
