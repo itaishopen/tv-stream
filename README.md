@@ -46,11 +46,12 @@ npm run build
 
 ```
 src/
-├── api/          # API service layer
-├── components/   # Reusable Vue components
-├── stores/       # Pinia stores
-├── types/        # TypeScript interfaces
-└── views/        # Page components
+├── api/          # API service layer (showService)
+├── components/   # Reusable Vue components (EpisodeCard, EpisodeModal, GenreRow, RatingBadge, SearchBar, ShowCard)
+├── stores/       # Pinia stores (ShowsStore)
+├── types/        # TypeScript interfaces (Show, Episode, Rating, Image, SearchResult)
+├── utils/        # Utility functions (stripHtml)
+└── views/        # Page components (DashboardView, ShowDetailView)
 ```
 
 ## Tech Stack
