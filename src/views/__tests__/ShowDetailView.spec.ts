@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import ShowDetailView from '../ShowDetailView.vue'
+import EpisodeCard from '@/components/EpisodeCard.vue'
+import EpisodeModal from '@/components/EpisodeModal.vue'
 import { showService } from '@/api/showService'
 import type { Show } from '@/types/show'
 
@@ -32,6 +34,7 @@ describe('ShowDetailView', () => {
     image: { medium: 'http://example.com/medium.jpg', original: 'http://example.com/original.jpg' },
     summary: '<p>A chemistry teacher turns to crime.</p>',
     status: 'Ended',
+    premiered: '2008-01-20',
     _embedded: {
       episodes: [
         {
@@ -287,6 +290,176 @@ describe('ShowDetailView', () => {
       await flushPromises()
 
       expect(wrapper.text()).toContain('No summary available')
+    })
+  })
+
+  describe('status badge', () => {
+    it('should display status badge with "Ended" text', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      expect(wrapper.text()).toContain('Ended')
+    })
+
+    it('should apply red styling for Ended status', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const statusBadge = wrapper.find('.text-red-400')
+      expect(statusBadge.exists()).toBe(true)
+      expect(statusBadge.text()).toContain('Ended')
+    })
+
+    it('should apply green styling for Running status', async () => {
+      const runningShow = { ...mockShow, status: 'Running' }
+      mockedGetShowDetails.mockResolvedValueOnce(runningShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const statusBadge = wrapper.find('.text-green-400')
+      expect(statusBadge.exists()).toBe(true)
+      expect(statusBadge.text()).toContain('Running')
+    })
+
+    it('should apply gray styling for other status', async () => {
+      const otherStatusShow = { ...mockShow, status: 'In Development' }
+      mockedGetShowDetails.mockResolvedValueOnce(otherStatusShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const statusBadge = wrapper.find('.text-gray-400.border-gray-500\\/40')
+      expect(statusBadge.exists()).toBe(true)
+    })
+
+    it('should show status indicator dot', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const statusDot = wrapper.find('.w-2.h-2.rounded-full')
+      expect(statusDot.exists()).toBe(true)
+    })
+  })
+
+  describe('premiered badge', () => {
+    it('should display premiered date', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      expect(wrapper.text()).toContain('Premiered 2008-01-20')
+    })
+
+    it('should have calendar icon', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const premieredBadge = wrapper.find('.bg-white\\/5')
+      expect(premieredBadge.exists()).toBe(true)
+      expect(premieredBadge.find('svg').exists()).toBe(true)
+    })
+
+    it('should not show premiered badge when no premiered date', async () => {
+      const showWithoutPremiered = { ...mockShow, premiered: undefined }
+      mockedGetShowDetails.mockResolvedValueOnce(showWithoutPremiered)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      expect(wrapper.text()).not.toContain('Premiered')
+    })
+  })
+
+  describe('episode modal', () => {
+    it('should not show modal initially', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const modal = wrapper.findComponent(EpisodeModal)
+      expect(modal.exists()).toBe(false)
+    })
+
+    it('should open modal when episode card is clicked', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const episodeCards = wrapper.findAllComponents(EpisodeCard)
+      expect(episodeCards.length).toBeGreaterThan(0)
+
+      await episodeCards[0]!.vm.$emit('click', mockShow._embedded!.episodes[0])
+      await flushPromises()
+
+      const modal = wrapper.findComponent(EpisodeModal)
+      expect(modal.exists()).toBe(true)
+    })
+
+    it('should pass correct episode to modal', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const episodeCards = wrapper.findAllComponents(EpisodeCard)
+      const firstEpisode = mockShow._embedded!.episodes[0]!
+      await episodeCards[0]!.vm.$emit('click', firstEpisode)
+      await flushPromises()
+
+      const modal = wrapper.findComponent(EpisodeModal)
+      expect(modal.props('episode')).toEqual(firstEpisode)
+    })
+
+    it('should close modal when close event is emitted', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      // Open the modal
+      const episodeCards = wrapper.findAllComponents(EpisodeCard)
+      await episodeCards[0]!.vm.$emit('click', mockShow._embedded!.episodes[0])
+      await flushPromises()
+
+      // Verify modal is open
+      let modal = wrapper.findComponent(EpisodeModal)
+      expect(modal.exists()).toBe(true)
+
+      // Close the modal
+      await modal.vm.$emit('close')
+      await flushPromises()
+
+      // Verify modal is closed
+      modal = wrapper.findComponent(EpisodeModal)
+      expect(modal.exists()).toBe(false)
+    })
+
+    it('should open modal with different episodes', async () => {
+      mockedGetShowDetails.mockResolvedValueOnce(mockShow)
+      const wrapper = mountComponent()
+
+      await flushPromises()
+
+      const episodeCards = wrapper.findAllComponents(EpisodeCard)
+      const secondEpisode = mockShow._embedded!.episodes[1]!
+
+      await episodeCards[1]!.vm.$emit('click', secondEpisode)
+      await flushPromises()
+
+      const modal = wrapper.findComponent(EpisodeModal)
+      expect(modal.props('episode')).toEqual(secondEpisode)
     })
   })
 })

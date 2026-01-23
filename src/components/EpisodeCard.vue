@@ -1,29 +1,23 @@
 <script setup lang="ts">
 import type { Episode } from "@/types/episode.ts";
 import RatingBadge from "@/components/RatingBadge.vue";
+import { stripHtml } from "@/utils/html.ts";
 
-/**
- * Displays a single episode card with image, title, rating, and summary.
- */
 interface Props {
-  /** The episode data to display */
   episode: Episode;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
-/**
- * Strips HTML tags from a string.
- * @param html - The HTML string to strip
- * @returns Plain text without HTML tags
- */
-const stripHtml = (html: string): string => {
-  return html.replace(/<[^>]*>/g, '');
-};
+const emit = defineEmits<{
+  click: [episode: Episode];
+}>();
 </script>
 
 <template>
-  <div class="episode-card group bg-dark-100 border border-white/10 rounded-xl overflow-hidden hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/20">
+  <div
+    class="episode-card group bg-dark-100 border border-white/10 rounded-xl overflow-hidden hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/20 cursor-pointer"
+    @click="emit('click', props.episode)">
     <div class="aspect-video bg-dark-200 overflow-hidden">
       <img
         v-if="episode.image"

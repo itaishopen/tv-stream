@@ -157,6 +157,37 @@ describe('EpisodeCard', () => {
     })
   })
 
+  describe('click events', () => {
+    it('should emit click event when card is clicked', async () => {
+      const episode = createMockEpisode()
+      const wrapper = mountComponent(episode)
+
+      const card = wrapper.find('.episode-card')
+      await card.trigger('click')
+
+      expect(wrapper.emitted('click')).toHaveLength(1)
+    })
+
+    it('should emit episode data when clicked', async () => {
+      const episode = createMockEpisode({ id: 42, name: 'Test Episode' })
+      const wrapper = mountComponent(episode)
+
+      const card = wrapper.find('.episode-card')
+      await card.trigger('click')
+
+      const emittedEvents = wrapper.emitted('click')
+      expect(emittedEvents).toBeTruthy()
+      expect(emittedEvents![0]).toEqual([episode])
+    })
+
+    it('should have cursor-pointer class for clickability', () => {
+      const wrapper = mountComponent()
+
+      const card = wrapper.find('.episode-card')
+      expect(card.classes()).toContain('cursor-pointer')
+    })
+  })
+
   describe('edge cases', () => {
     it('should handle episode with very long name', () => {
       const wrapper = mountComponent(createMockEpisode({

@@ -5,7 +5,9 @@
   import type {Episode} from "@/types/episode.ts";
   import {showService} from "@/api/showService.ts";
   import EpisodeCard from "@/components/EpisodeCard.vue";
+  import EpisodeModal from "@/components/EpisodeModal.vue";
   import RatingBadge from "@/components/RatingBadge.vue";
+  import { stripHtml } from "@/utils/html.ts";
 
 
   const route = useRoute();
@@ -14,6 +16,15 @@
   const show = ref<Show | null>(null);
   const loading = ref<boolean>(true);
   const error = ref<string | null>(null);
+  const selectedEpisode = ref<Episode | null>(null);
+
+  const openEpisodeModal = (episode: Episode) => {
+    selectedEpisode.value = episode;
+  };
+
+  const closeEpisodeModal = () => {
+    selectedEpisode.value = null;
+  };
 
   const episodesBySeason = computed(() => {
     if (!show.value?._embedded?.episodes) return new Map<number, Episode[]>();
@@ -33,10 +44,6 @@
   const sortedSeasons = computed(() => {
     return Array.from(episodesBySeason.value.keys()).sort((a, b) => a - b);
   });
-
-  const stripHtml = (html: string): string => {
-    return html.replace(/<[^>]*>/g, '');
-  };
 
   onMounted(async () => {
     const showId = Number(route.params.id);
@@ -194,7 +201,8 @@
               <EpisodeCard
                 v-for="episode in episodesBySeason.get(season)"
                 :key="episode.id"
-                 :episode="episode"/>
+                :episode="episode"
+                @click="openEpisodeModal" />
 
             </div>
           </div>
@@ -208,6 +216,11 @@
         </div>
       </div>
     </div>
+
+    <EpisodeModal
+      v-if="selectedEpisode"
+      :episode="selectedEpisode"
+      @close="closeEpisodeModal" />
   </div>
 </template>
 

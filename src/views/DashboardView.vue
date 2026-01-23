@@ -70,7 +70,7 @@
           <button
             @click="showStore.prevPage"
             :disabled="showStore.currentPage === 0 || showStore.loading"
-            class="px-6 py-3 bg-dark-100 hover:bg-dark-200 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-full font-semibold transition-all hover:scale-105 border cursor-pointer border-white/10">
+            class="px-6 py-3 bg-dark-100 hover:bg-dark-200 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-full font-semibold transition-all hover:scale-105 border border-white/10 cursor-pointer">
             ← Previous Page
           </button>
 

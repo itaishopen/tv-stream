@@ -68,7 +68,7 @@ describe('DashboardView', () => {
       mockedGetShows.mockResolvedValueOnce(mockShows)
       const wrapper = mountComponent()
 
-      expect(wrapper.find('h1').text()).toBe('Tv-Show Dashboard')
+      expect(wrapper.find('h1').text()).toBe('TV-Show Dashboard')
     })
 
     it('should render the SearchBar component', () => {
