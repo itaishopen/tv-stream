@@ -49,6 +49,12 @@ const router = useRouter();
     showResults.value = false;
   };
 
+  const openSearchPage = () => {
+    if (searchQuery.value.trim()) {
+      router.push({ path: '/search', query: { search: searchQuery.value.trim() } });
+    }
+  }
+
   const closeSearch = () => {
     showResults.value = false;
   };
@@ -64,6 +70,7 @@ const router = useRouter();
       <input
         v-model="searchQuery"
         type="text"
+        @keyup.enter="openSearchPage()"
         placeholder="Search shows..."
         class="w-full px-5 py-3 pl-12 bg-dark-100/50 backdrop-blur-md border border-white/10 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
         @focus="showResults = searchQuery.length >= 2"/>

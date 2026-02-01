@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from "@/views/DashboardView.vue";
 import ShowDetailView from "@/views/ShowDetailView.vue";
+import SearchBar from "@/components/SearchBar.vue";
+import SearchRes from "@/views/SearchRes.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +22,11 @@ const router = createRouter({
       meta: {
         title: 'Show Details - TVStream Dashboard'
       }
+    },
+    {
+      path:'/search',
+      name: 'search-page',
+      component: SearchRes,
     },
     {
       // Catch-all 404 route
